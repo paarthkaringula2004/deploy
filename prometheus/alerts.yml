@@ -1,0 +1,22 @@
+groups:
+  - name: eassist-service-health
+    rules:
+      - alert: ServiceUnavailable
+        expr: up == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: operations
+        annotations:
+          summary: '{{ $labels.service }} is unavailable'
+          description: 'Prometheus cannot collect metrics from {{ $labels.instance }} for 5 minutes.'
+      - alert: EAssistDatabaseUnavailable
+        expr: eassist_database_up == 0
+        for: 2m
+        labels:
+          severity: critical
+          service: eAssist
+          team: operations
+        annotations:
+          summary: 'eAssist cannot reach PostgreSQL'
+          description: 'The application database health check has failed for 2 minutes.'
