@@ -18,15 +18,20 @@ scrape_configs:
       - targets: [localhost:9090]
         labels:
           service: Prometheus
+
   - job_name: alertmanager
     scheme: https
     static_configs:
       - targets: [eassist-alertmanager.onrender.com]
         labels:
           service: Alertmanager
+
   - job_name: eassist
     scheme: https
     metrics_path: /api/metrics
+    authorization:
+      type: Bearer
+      credentials_file: /etc/secrets/prometheus_metrics_token
     static_configs:
       - targets: [ai-force-ops.onrender.com]
         labels:
