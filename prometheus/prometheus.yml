@@ -1,13 +1,18 @@
 global:
-  scrape_interval: 30s
+  scrape_interval: 15s
   scrape_timeout: 10s
-  evaluation_interval: 30s
+  evaluation_interval: 15s
 
 alerting:
   alertmanagers:
     - scheme: https
-      static_configs:
-        - targets: [eassist-alertmanager-emc7.onrender.com]
+      api_version: v2
+      http_sd_configs:
+        - url: https://ai-force-ops.onrender.com/api/prometheus/discovery/alertmanager
+          refresh_interval: 15s
+          authorization:
+            type: Bearer
+            credentials_file: /etc/secrets/prometheus_metrics_token
 
 rule_files:
   - /etc/prometheus/alerts.yml
@@ -20,11 +25,13 @@ scrape_configs:
           service: Prometheus
 
   - job_name: alertmanager
-    scheme: https
-    static_configs:
-      - targets: [eassist-alertmanager-emc7.onrender.com]
-        labels:
-          service: Alertmanager
+    scrape_interval: 15s
+    http_sd_configs:
+      - url: https://ai-force-ops.onrender.com/api/prometheus/discovery/alertmanager
+        refresh_interval: 15s
+        authorization:
+          type: Bearer
+          credentials_file: /etc/secrets/prometheus_metrics_token
 
   - job_name: eassist
     scheme: https
