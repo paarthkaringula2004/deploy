@@ -13,7 +13,6 @@ alerting:
           authorization:
             type: Bearer
             credentials_file: /etc/secrets/prometheus_metrics_token
-
 rule_files:
   - /etc/prometheus/alerts.yml
 
@@ -33,13 +32,3 @@ scrape_configs:
           type: Bearer
           credentials_file: /etc/secrets/prometheus_metrics_token
 
-  - job_name: eassist
-    scheme: https
-    metrics_path: /api/metrics
-    authorization:
-      type: Bearer
-      credentials_file: /etc/secrets/prometheus_metrics_token
-    static_configs:
-      - targets: [ai-force-ops.onrender.com]
-        labels:
-          service: eAssist
